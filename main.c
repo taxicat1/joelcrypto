@@ -323,6 +323,7 @@ int main(int argc, char** argv) {
 			else if (strcasecmp(cipher_args[0], "CAESAR") == 0) {
 				choosen_cipher = CAESAR;
 				iv_needed = false;
+				key_needed = false;
 				
 				if (key_defined) {
 					printf(WARNING_KEY_NOT_NEEDED);
