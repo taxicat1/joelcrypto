@@ -73,8 +73,7 @@ void ECB_encrypt(block_func encryptor, buffered_container* input, buffered_conta
 		i++;
 		if (i == input->buffer_len) {
 			if (bc_rnext(input) != 0) {
-				// There is more data! Flush output buffer and reset i to 0
-				bc_flush(output);
+				// There is more data! Reset i to 0
 				i = 0;
 				
 				// Fresh data loaded, try to pad it if we have not done padding
