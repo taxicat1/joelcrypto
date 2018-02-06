@@ -67,7 +67,7 @@ void ECB_encrypt(block_func encryptor, buffered_container* input, buffered_conta
 		
 		if (i % block_size == block_size - 1) {
 			encryptor(block, block_size, key, key_size);
-			bc_write(output, block, block_size);
+			bc_write_block(output, block, block_size);
 		}
 		
 		i++;
@@ -112,7 +112,7 @@ void ECB_decrypt(block_func decryptor, buffered_container* input, buffered_conta
 		
 		if (i % block_size == block_size - 1) {
 			decryptor(block, block_size, key, key_size);
-			bc_write(output, block, block_size);
+			bc_write_block(output, block, block_size);
 		}
 		
 		i++;
@@ -188,7 +188,7 @@ void CBC_encrypt(block_func encryptor, buffered_container* input, buffered_conta
 			memcpy(previous_block, block, block_size);
 			
 			// Write to output buffer
-			bc_write(output, block, block_size);
+			bc_write_block(output, block, block_size);
 		}
 		
 		i++;
@@ -249,7 +249,7 @@ void CBC_decrypt(block_func decryptor, buffered_container* input, buffered_conta
 			memcpy(previous_block, ct_block, block_size);
 			
 			// Write to output buffer
-			bc_write(output, block, block_size);
+			bc_write_block(output, block, block_size);
 		}
 		
 		i++;
@@ -323,7 +323,7 @@ void CFB_encrypt(block_func encryptor, buffered_container* input, buffered_conta
 			memcpy(previous_block, block, block_size);
 			
 			// Write to output buffer
-			bc_write(output, block, block_size);
+			bc_write_block(output, block, block_size);
 		}
 		
 		i++;
@@ -338,7 +338,7 @@ void CFB_encrypt(block_func encryptor, buffered_container* input, buffered_conta
 			xor_buffer(block, previous_block, i % block_size);
 			
 			// Write to output buffer
-			bc_write(output, block, i % block_size);
+			bc_write_block(output, block, i % block_size);
 		}
 		
 		// Load next block like normal if the buffer is full
@@ -381,7 +381,7 @@ void CFB_decrypt(block_func encryptor, buffered_container* input, buffered_conta
 			xor_buffer(previous_ct, block, block_size);
 			
 			// Write to output buffer
-			bc_write(output, previous_ct, block_size);
+			bc_write_block(output, previous_ct, block_size);
 			
 			// Copy current block into previous block for next round
 			memcpy(previous_ct, block, block_size);
@@ -399,7 +399,7 @@ void CFB_decrypt(block_func encryptor, buffered_container* input, buffered_conta
 			xor_buffer(previous_ct, block, i % block_size);
 			
 			// Write to output buffer
-			bc_write(output, previous_ct, i % block_size);
+			bc_write_block(output, previous_ct, i % block_size);
 		}
 		
 		// Load next block like normal if the buffer is full
@@ -442,7 +442,7 @@ void OFB_encrypt(block_func encryptor, buffered_container* input, buffered_conta
 			xor_buffer(block, e_output, block_size);
 			
 			// Write to output buffer
-			bc_write(output, block, block_size);
+			bc_write_block(output, block, block_size);
 		}
 		
 		
@@ -458,7 +458,7 @@ void OFB_encrypt(block_func encryptor, buffered_container* input, buffered_conta
 			xor_buffer(block, e_output, i % block_size);
 			
 			// Write to output buffer
-			bc_write(output, block, i % block_size);
+			bc_write_block(output, block, i % block_size);
 		}
 		
 		// Load next block like normal if the buffer is full
@@ -513,7 +513,7 @@ void CTR_encrypt(block_func encryptor, buffered_container* input, buffered_conta
 			xor_buffer(block, counter_cpy, block_size);
 			
 			// Write to output buffer
-			bc_write(output, block, block_size);
+			bc_write_block(output, block, block_size);
 		}
 		
 		i++;
@@ -528,9 +528,7 @@ void CTR_encrypt(block_func encryptor, buffered_container* input, buffered_conta
 			xor_buffer(block, counter, i % block_size);
 			
 			// Write to output buffer
-			//memcpy(&(output->buffer[output->buffer_len]), block, i % block_size);
-			//output->buffer_len += i % block_size;
-			bc_write(output, block, i % block_size);
+			bc_write_block(output, block, i % block_size);
 		}
 		
 		// Load next block like normal if the buffer is full

@@ -36,6 +36,7 @@ void rc4(buffered_container* input, buffered_container* output,
 			// Stream encryption
 			j = 0;
 			i = 0;
+			byte K;
 			
 			unsigned int p = 0;
 			while (p < input->buffer_len) {
@@ -43,10 +44,9 @@ void rc4(buffered_container* input, buffered_container* output,
 				j = (j + S[i]) % 256;
 				swap(&S[i], &S[j]);
 				
-				byte K = S[(S[i] + S[j]) % 256];
+				K = S[(S[i] + S[j]) % 256];
 				
-				byte c = input->buffer[p] ^ K;
-				bc_write(output, &c, 1);
+				bc_write_byte(output, input->buffer[p] ^ K);
 				
 				p++;
 				// Execute this check on the last loop before we would finish

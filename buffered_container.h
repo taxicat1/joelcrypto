@@ -3,7 +3,7 @@
 
 #define BUFFER_SIZE 4096
 #define CHUNK_SIZE 6
-#define MAX_FLUSH_SIZE (int)(BUFFER_SIZE / CHUNK_SIZE) * CHUNK_SIZE // 4092
+#define MAX_FLUSH_SIZE (BUFFER_SIZE / CHUNK_SIZE) * CHUNK_SIZE // 4092
 
 #define OUTPUT_FILE "w+"
 #define INPUT_FILE "r"
@@ -175,9 +175,34 @@ void bc_flush(buffered_container* bc) {
 	bc->buffer_len = 0;
 }
 
-void bc_write(buffered_container* bc, const byte* data, const size_t data_len) {
+void bc_write_byte(buffered_container* bc, const byte data) {
 	
-	size_t data_remaining = data_len;
+	#if BUFFER_SIZE != MAX_FLUSH_SIZE
+	// Truncate data, flush, and then move truncated data to the start of the buffer
+	if (bc->buffer_len > MAX_FLUSH_SIZE) {
+		size_t extra_bytes = bc->buffer_len - MAX_FLUSH_SIZE;
+		bc->buffer_len = MAX_FLUSH_SIZE;
+		bc_flush(bc);
+		memmove(bc->buffer, &bc->buffer[MAX_FLUSH_SIZE], extra_bytes);
+		bc->buffer_len = extra_bytes;
+	}
+	#endif
+	
+	if (bc->buffer_len == MAX_FLUSH_SIZE) {
+		bc_flush(bc);
+	}
+	
+	bc->buffer[bc->buffer_len++] = data;
+	
+	if (bc->buffer_len == MAX_FLUSH_SIZE) {
+		bc_flush(bc);
+	}
+}
+
+
+void bc_write_block(buffered_container* bc, const byte* data, const size_t block_size) {
+	
+	size_t data_remaining = block_size;
 	unsigned int data_pointer = 0;
 	
 	while (data_remaining > 0) {
@@ -190,7 +215,7 @@ void bc_write(buffered_container* bc, const byte* data, const size_t data_len) {
 			size_t target_size = bc->buffer_len + data_remaining;
 			
 			if (target_size > BUFFER_SIZE) {
-				target_size = MAX_FLUSH_SIZE;
+				target_size = BUFFER_SIZE;
 			}
 			
 			// We have our target size, compute how many bytes we can
@@ -206,23 +231,21 @@ void bc_write(buffered_container* bc, const byte* data, const size_t data_len) {
 			}
 		}
 		
-		// The buffer is now full up to MAX_FLUSH_SIZE, or the end of the data
-		size_t extra_bytes = 0;
+		// The buffer now contains as many new bytes as possible
 		
+		#if BUFFER_SIZE != MAX_FLUSH_SIZE
 		// Truncate data and save how much we truncated, if applicable
 		if (bc->buffer_len > MAX_FLUSH_SIZE) {
-			extra_bytes = bc->buffer_len - MAX_FLUSH_SIZE;
+			size_t extra_bytes = bc->buffer_len - MAX_FLUSH_SIZE;
 			bc->buffer_len = MAX_FLUSH_SIZE;
+			bc_flush(bc);
+			memmove(bc->buffer, &bc->buffer[MAX_FLUSH_SIZE], extra_bytes);
+			bc->buffer_len = extra_bytes;
 		}
+		#endif
 		
 		if (bc->buffer_len == MAX_FLUSH_SIZE) {
 			bc_flush(bc);
-		}
-		
-		// Move extra bytes, if any, to beginning
-		if (extra_bytes > 0) {
-			bc->buffer_len = extra_bytes;
-			memmove(bc->buffer, &bc->buffer[MAX_FLUSH_SIZE], extra_bytes);
 		}
 	}
 }

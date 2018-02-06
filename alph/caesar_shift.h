@@ -51,7 +51,7 @@ void shift(buffered_container* input, buffered_container* output,
 					}
 				}
 				
-				bc_write(output, &c, 1);
+				bc_write_byte(output, c);
 				
 				i++;
 				if (i == input->buffer_len) {
@@ -97,7 +97,7 @@ void shift(buffered_container* input, buffered_container* output,
 					}
 				}
 				
-				bc_write(output, &c, 1);
+				bc_write_byte(output, c);
 				
 				i++;
 				if (i == input->buffer_len) {
