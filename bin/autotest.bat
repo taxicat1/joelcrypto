@@ -58,7 +58,7 @@ exit
 		if %errorlevel%==0 (
 			echo %~1 test passed
 		) else (
-			echo %~1 test failed: encrypted and decrypted files do not match
+			echo %~1 test failed: unencrypted and decrypted files do not match
 		)
 	) else (
 		echo %~1 test failed: program returned error code %errorlevel%
