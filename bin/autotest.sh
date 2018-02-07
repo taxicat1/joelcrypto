@@ -40,6 +40,11 @@ key="WTGHYJUK"
 check_result "Vigenere cipher" "test_alph.txt" "test_alph.end"
 
 key="6Hr4SdO9y7Hfw3y45Gk3dy1aqQshJou7TgrERRE610m="
+
+./joelcrypto --encrypt -i file:test_ascii.txt -o file:test_ascii.inprogress -c RC4 -k base64:$key > /dev/null
+./joelcrypto --decrypt -i file:test_ascii.inprogress -o file:test_ascii.end -c RC4 -k base64:$key > /dev/null
+check_result "RC4 cipher" "test_ascii.txt" "test_ascii.end"
+
 iv="qRA67ZlOFFnJj8cRTEt2hw=="
 
 keysizes=(128 192 256)

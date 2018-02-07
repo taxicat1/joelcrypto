@@ -31,6 +31,11 @@ set /a key=WTGHYJUK
 call :CheckResult "Vigenere cipher" "test_alph.txt" "test_alph.end"
 
 set key=6Hr4SdO9y7Hfw3y45Gk3dy1aqQshJou7TgrERRE610m=
+
+%executable% --encrypt -i file:test_ascii.txt -o file:test_ascii.inprogress -c RC4 -k base64:%key% > nul
+%executable% --decrypt -i file:test_ascii.inprogress -o file:test_ascii.end -c RC4 -k base64:%key% > nul
+call :CheckResult "RC4 cipher" "test_ascii.txt" "test_ascii.end"
+		
 set iv=qRA67ZlOFFnJj8cRTEt2hw==
 		
 for %%b in (128 192 256) do (
