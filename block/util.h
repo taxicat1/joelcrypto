@@ -11,12 +11,14 @@ typedef enum cmode_t cmode_t;
 
 typedef void (*block_func)(byte*, const size_t, const byte*, const size_t);
 
-inline void xor_buffer(byte* src, const byte* out, size_t len) {
+void xor_buffer(byte*, const byte*, const size_t);
+inline void xor_buffer(byte* src, const byte* out, const size_t len) {
 	for (unsigned int i = 0; i < len; i++) {
 		src[i] ^= out[i];
 	}
 }
 
+void increment_buffer(byte*, const size_t);
 inline void increment_buffer(byte* buff, const size_t buff_len) {
 	int i = buff_len - 1;
 	do {
@@ -556,4 +558,5 @@ void CTR_decrypt(block_func encryptor, buffered_container* input, buffered_conta
 	// These are also literally identical
 	CTR_encrypt(encryptor, input, output, iv, iv_size, block_size, key, key_size);
 }
+
 #endif
