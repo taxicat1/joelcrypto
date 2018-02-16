@@ -72,8 +72,8 @@ buffered_container* bc_from_file(const char* fname, const char* mode, unsigned i
 		exit(1);
 	}
 	
-	if (mode == INPUT_FILE) {
-		int read = bc_rnext(bc);
+	if (strcmp(mode, INPUT_FILE) == 0) {
+		bc_rnext(bc);
 		if (ferror(bc->fd) != 0) {
 			perror("File read error");
 			exit(1);
@@ -107,7 +107,7 @@ void bc_fopen(buffered_container* bc, const char* fname, const char* mode) {
 		exit(1);
 	}
 	
-	if (mode == INPUT_FILE) {
+	if (strcmp(mode, INPUT_FILE) == 0) {
 		bc_rnext(bc);
 	}
 }
