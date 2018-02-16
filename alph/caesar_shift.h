@@ -10,11 +10,6 @@
 #include "buffered_container.h"
 #include "alph/util.h"
 
-inline bool shift_keycheck(const byte* key, const size_t key_len) {
-	// TODO
-	return false;
-}
-
 void shift(buffered_container* input, buffered_container* output, 
 	const int amt, const crypto_op operation) {
 	
