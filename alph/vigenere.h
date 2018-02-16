@@ -33,7 +33,7 @@ bool vigenere_keycheck(const byte* key, const size_t key_len) {
 	return true;
 }
 
-byte* vigenere(buffered_container* input, buffered_container* output, 
+void vigenere(buffered_container* input, buffered_container* output, 
 	const byte* key, const size_t key_len, const crypto_op operation) {
 	
 	output->buffer_len = 0;
