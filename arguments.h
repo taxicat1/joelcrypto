@@ -12,6 +12,7 @@
 #include "types.h"
 #include "buffered_container.h"
 
+void print_help_msg();
 inline void print_help_msg() {
 	printf("\
     joelcrypto\n\

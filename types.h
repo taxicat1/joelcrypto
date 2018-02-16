@@ -48,6 +48,7 @@ void print_base64(const byte* buffer, const size_t buffer_len) {
 	}
 }
 
+int base64_value(char);
 inline int base64_value(char c) {
 	
 	if (is_upper(c)) {
@@ -146,6 +147,7 @@ byte* get_base64_bytes(char* str) {
 }
 
 
+void print_hex(const byte*, const size_t);
 inline void print_hex(const byte* buffer, const size_t buffer_len) {
 	for (unsigned int i = 0; i < buffer_len; i++) {
 		printf("%0x", buffer[i]);

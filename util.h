@@ -35,7 +35,7 @@ inline void swap(byte* a, byte* b) {
     *b = temp;
 }
 
-bool is_power_2(const unsigned int)
+bool is_power_2(const unsigned int);
 inline bool is_power_2(const unsigned int num) {
 	return num && !(num & (num - 1));
 }
