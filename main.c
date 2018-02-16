@@ -39,11 +39,11 @@
 #include "windows.h"
 #include "util.h"
 #include "buffered_container.h"
-#include "types.h"
 #include "alph/util.h"
+#include "block/util.h"
+#include "types.h"
 #include "alph/vigenere.h"
 #include "alph/caesar_shift.h"
-#include "block/util.h"
 #include "block/aes.h"
 #include "stream/rc4.h"
 
@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
 		print_help_msg();
 	}
 	
-	for (unsigned int i = 0; i < argc; i++) {
+	for (int i = 0; i < argc; i++) {
 		if (
 			strcmp(argv[i], "-h") == 0 ||
 			strcmp(argv[i], "--help") == 0
@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
 	crypto_op operation;
 	
 	
-	for (unsigned int j = 1; j < argc; j++) {
+	for (int j = 1; j < argc; j++) {
 		
 		bool last_arg = j + 1 == argc;
 		
